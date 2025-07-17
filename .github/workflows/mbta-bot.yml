@@ -1,0 +1,32 @@
+# .github/workflows/mbta-bot.yml
+name: MBTA Bluesky Bot
+
+on:
+  schedule:
+    # Run every 5 minutes for alerts
+    - cron: '*/5 * * * *'
+  workflow_dispatch: # Allow manual triggering
+
+jobs:
+  run-bot:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: npm ci
+      
+    - name: Run MBTA Bot
+      env:
+        MBTA_API_KEY: ${{ secrets.MBTA_API_KEY }}
+        BLUESKY_HANDLE: ${{ secrets.BLUESKY_HANDLE }}
+        BLUESKY_PASSWORD: ${{ secrets.BLUESKY_PASSWORD }}
+      run: node github-actions-bot.js
