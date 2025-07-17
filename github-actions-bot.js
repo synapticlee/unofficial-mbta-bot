@@ -285,31 +285,6 @@ class MBTABlueskyBotGitHubActions {
   }
 }
 
-async initialize() {
-  try {
-    console.log('Environment check:');
-    console.log('MBTA_API_KEY:', this.mbtaApiKey ? 'Present' : 'Missing');
-    console.log('BLUESKY_HANDLE:', this.blueskyHandle ? 'Present' : 'Missing');
-    console.log('BLUESKY_PASSWORD:', this.blueskyPassword ? 'Present' : 'Missing');
-    
-    if (!this.blueskyHandle || !this.blueskyPassword) {
-      throw new Error('Missing Bluesky credentials in GitHub Secrets');
-    }
-    
-    console.log(`Logging into Bluesky as: ${this.blueskyHandle}`);
-    
-    await this.agent.login({
-      identifier: this.blueskyHandle,
-      password: this.blueskyPassword
-    });
-    
-    console.log('Successfully logged into Bluesky');
-  } catch (error) {
-    console.error('Failed to login to Bluesky:', error);
-    throw error;
-  }
-}
-
 // Run the bot
 const bot = new MBTABlueskyBotGitHubActions();
 bot.run().catch(console.error);
